@@ -1,0 +1,79 @@
+{
+	"pages": [
+		// pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+		{
+			"path": "pages/word/index",
+			"style": {
+				"navigationBarTitleText": "爱 词",
+				"enablePullDownRefresh": false
+			}
+		}, {
+			"path": "pages/learn/index",
+			"style": {
+				"navigationBarTitleText": "Demo",
+				"enablePullDownRefresh": false
+			}
+		},
+		{
+			"path": "pages/index/index",
+			"style": {
+				"navigationBarTitleText": "uni-app"
+			}
+		},
+		{
+			"path": "pages/unicloud-db/index",
+			"style": {
+				"navigationBarTitleText": "clientDB",
+				"enablePullDownRefresh": false
+			}
+		}, {
+			"path": "pages/unicloud-db/add",
+			"style": {
+				"navigationBarTitleText": "添加",
+				"enablePullDownRefresh": false
+			}
+
+		}, {
+			"path": "pages/unicloud-db/update",
+			"style": {
+				"navigationBarTitleText": "修改",
+				"enablePullDownRefresh": false
+			}
+
+		}, {
+			"path": "pages/web-view/web-view",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false
+			}
+		}
+	],
+	"globalStyle": {
+		"navigationBarTextStyle": "black",
+		"navigationBarTitleText": "爱 词",
+		"navigationBarBackgroundColor": "#F8F8F8",
+		"backgroundColor": "#F8F8F8"
+	},
+	"tabBar": {
+		"color": "#7A7E83",
+		"selectedColor": "#3CC51F",
+		"borderStyle": "black",
+		"backgroundColor": "white",
+		"list": [{
+			"pagePath": "pages/word/index",
+			"iconPath": "static/icon/word.png",
+			"selectedIconPath": "static/icon/word-h.png",
+			"text": "单词"
+		}, {
+			"pagePath": "pages/learn/index",
+			"iconPath": "static/icon/learn.png",
+			"selectedIconPath": "static/icon/learn-h.png",
+			"text": "学习"
+		}, {
+			"pagePath": "pages/index/index",
+			"iconPath": "static/icon/study.png",
+			"selectedIconPath": "static/icon/study-h.png",
+			"text": "研究"
+		}]
+	}
+}

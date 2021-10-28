@@ -1,0 +1,102 @@
+{
+	"bsonType": "object",
+	"permission": {
+		"read": true,
+		"create": true,
+		"update": true,
+		"delete": true
+	},
+	"required": ["username", "mobile", "comment"],
+	"properties": {
+		"_id": {
+			"description": "存储文档 ID（用户 ID），系统自动生成"
+		},
+		"username": {
+			"bsonType": "string",
+			"title": "姓名",
+			"description": "请输入姓名",
+			"order": 1,
+			"trim": "both"
+		},
+		"gender": {
+			"bsonType": "int",
+			"title": "性别",
+			"description": "用户性别：0 未知 1 男性 2 女性",
+			"order": 2,
+			"defaultValue": 0,
+			"enum": [{
+				"text": "未知",
+				"value": 0
+			}, {
+				"text": "男",
+				"value": 1
+			}, {
+				"text": "女",
+				"value": 2
+			}]
+			// ,"bsonType": "array",
+			// "componentForEdit": {
+			// 	"name": "uni-data-checkbox",
+			// 	"props": {
+			// 		"multiple": true
+			// 	}
+			// }
+		},
+		"address": {
+			"arrayType": "string",
+			"title": "地址",
+			"enum": {
+				"collection": "opendb-city-china",
+				"field": "code as value, name as text"
+			},
+			"enumType": "tree"
+		},
+		// "nation_china": {
+		// 	"bsonType": "string",
+		// 	"title": "民簇",
+		// 	"enum": {
+		// 		"collection": "opendb-nation-china",
+		// 		"field": "name as text, _id as value"
+		// 	},
+		// 	// 关联查询
+		// 	"foreignKey": "opendb-nation-china._id",
+		// 	// 组件类型
+		// 	"componentForEdit": {
+		// 		"name": "uni-data-picker"
+		// 	}
+		// },
+		"mobile": {
+			"bsonType": "string",
+			"title": "电话",
+			"order": 3,
+			"description": "电话",
+			"pattern": "^\\+?[0-9-]{3,20}$",
+			"trim": "both"
+		},
+		"email": {
+			"bsonType": "string",
+			"format": "email",
+			"title": "邮箱",
+			"order": 4,
+			"description": "邮箱地址",
+			"trim": "both"
+		},
+		"comment": {
+			"bsonType": "string",
+			"title": "备注",
+			"order": 5,
+			"description": "备注",
+			"trim": "both",
+			"component": {
+				"name": "textarea"
+			}
+		},
+		"create_date": {
+			"bsonType": "timestamp",
+			"description": "创建时间",
+			"forceDefaultValue": {
+				"$env": "now"
+			}
+		}
+	}
+}
