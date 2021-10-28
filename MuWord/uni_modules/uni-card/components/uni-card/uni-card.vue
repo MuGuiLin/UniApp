@@ -38,7 +38,7 @@
 				<image v-if="thumbnail" class="uni-card__thumbnailimage-image" :src="thumbnail" mode="aspectFill" />
 				<uni-icons v-if="!thumbnail" type="image" size="30" color="#999" />
 			</view>
-			<view v-if="title" class="uni-card__thumbnailimage-title">
+			<view v-if="title" v-show="isTitle" class="uni-card__thumbnailimage-title">
 				<text class="uni-card__thumbnailimage-title-text">{{ title }}</text>
 			</view>
 		</view>
@@ -108,6 +108,11 @@
 				// 内容区域是否通栏
 				type: Boolean,
 				default: false
+			},
+			isTitle: {
+				// 是否开标题
+				type: [Boolean, String],
+				default: true
 			},
 			isShadow: {
 				// 是否开启阴影

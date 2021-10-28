@@ -4,26 +4,28 @@
 		{
 			"path": "pages/word/index",
 			"style": {
-				"navigationBarTitleText": "爱 词",
-				"enablePullDownRefresh": false
+				"navigationBarTitleText": "Words",
+				"enablePullDownRefresh": true
 			}
 		}, {
 			"path": "pages/learn/index",
 			"style": {
-				"navigationBarTitleText": "Demo",
+				"navigationBarTitleText": "Learning",
 				"enablePullDownRefresh": false
 			}
 		},
 		{
 			"path": "pages/index/index",
 			"style": {
-				"navigationBarTitleText": "uni-app"
+				"navigationBarTitleText": "Uni-App",
+				"navigationBarTextStyle": "white",
+				"navigationBarBackgroundColor": "#00aa00"
 			}
 		},
 		{
 			"path": "pages/unicloud-db/index",
 			"style": {
-				"navigationBarTitleText": "clientDB",
+				"navigationBarTitleText": "ClientDB",
 				"enablePullDownRefresh": false
 			}
 		}, {
@@ -43,7 +45,7 @@
 		}, {
 			"path": "pages/web-view/web-view",
 			"style": {
-				"navigationBarTitleText": "",
+				"navigationBarTitleText": "Web-View",
 				"enablePullDownRefresh": false
 			}
 		}

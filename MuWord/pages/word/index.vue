@@ -1,35 +1,39 @@
 <template>
 	<view class="word">
-		<uni-card :title="item.name" mode="style" :is-shadow="true" :thumbnail="thum" :extra="item.read" note="">
+		<uni-card :title="item.name" mode="style" :is-title="!show.show" :is-shadow="true" :thumbnail="thum"
+			:extra="item.read">
 			<view class="mean">
-				<text>{{item.mean}}</text>
+				<text v-show="show.mean">{{item.mean}}</text>
 			</view>
 		</uni-card>
-		<uni-group title="" margin-top="10">
-			显示词意：
-			<switch checked color="" @change="switchChange" />
+
+		<uni-group>
+			<input v-if="show.show" class="uni-input" :class="{'error': show.error}" @blur="blur" v-model="show.write" placeholder="在这里默认单词哦!" />
+			<picker @change="bind" :value="type.index" :range="type.array" range-key="type">
+				<view class="uni-input">{{type.array[index].type}}</view>
+			</picker>
 		</uni-group>
 
-		<uni-group title="" margin-top="10">
-			<radio-group @change="radioChange">
-				<label class="uni-list-cell uni-list-cell-pd" v-for="(item, index) in items" :key="item.value">
-					<radio :value="item.value" :checked="index === current" />
-					{{item.name}}
-				</label>
-			</radio-group>
-		</uni-group>
-
-		<uni-group title="" margin-top="10">
+		<uni-group margin-top="10">
 			<button type="primary" @click="next">NEXT</button>
 		</uni-group>
+
+		<uni-fab ref="fab" :pattern="fab.pattern" :content="fab.content" :horizontal="fab.horizontal" :vertical="fab.vertical" :direction="fab.direction" @trigger="trigger" />
 	</view>
 </template>
 
 <script>
+	const db = uniCloud.database();
 	export default {
 		data() {
 			return {
-				word: [],
+				data: [],
+				show: {
+					mean: true,
+					show: false,
+					write: "",
+					error: false,
+				},
 				item: {
 					type: "名词",
 					name: "English",
@@ -40,49 +44,103 @@
 				},
 				index: 0,
 				thum: 'https://vkceyugu.cdn.bspapp.com/VKCEYUGU-dc-site/460d46d0-4fcc-11eb-8ff1-d5dcf8779628.png',
-				items: [{
-						value: 'time',
-						name: '时间'
+				type: {
+					index: 0,
+					array: [{
+						type: '全部',
+					}]
+				},
+				fab: {
+					horizontal: 'right',
+					vertical: 'bottom',
+					direction: 'vertical',
+					pattern: {
+						color: '#7A7E83',
+						// buttonColor: "#269939",
+						selectedColor: '#269939',
+						backgroundColor: '#fff',
 					},
-					{
-						value: 'food',
-						name: '食物'
-					}
-				],
-				current: 0
+					content: [{
+							iconPath: '/static/icon/term.svg',
+							selectedIconPath: '/static/icon/term-h.svg',
+							text: '词意',
+							active: true
+						},
+						{
+							iconPath: '/static/icon/write.svg',
+							selectedIconPath: '/static/icon/write-h.svg',
+							text: '默写',
+							active: false
+						}
+					]
+				},
 			};
 		},
 		onLoad() {
-			const db = uniCloud.database();
-			db.collection('word').get().then(({
-				result
-			}) => {
-				console.log(result)
-				this.word = result.data;
-				this.item = result.data[this.index];
-			});
+			uni.startPullDownRefresh();
+			this.init();
+		},
+		onPullDownRefresh() {
+			this.init();
+			setTimeout(function() {
+				uni.stopPullDownRefresh();
+			}, 1000);
 		},
 		mounted() {
-			
+
 		},
 		methods: {
-			switchChange: function(e) {
-				console.log('switch 发生 change 事件，携带值为', e.target.value)
+			init() {
+				db.collection('word').get().then(({
+					result
+				}) => {
+					console.log(result)
+					this.data = result.data;
+					this.item = result.data[this.index];
+					const obj = {};
+					this.type.array = result.data.reduce(function(item, next) {
+						obj[next.type] ? '' : obj[next.type] = true && item.push(next);
+						return item;
+					}, []);
+				});
 			},
-			radioChange: function(evt) {
-				for (let i = 0; i < this.items.length; i++) {
-					if (this.items[i].value === evt.detail.value) {
-						this.current = i;
-						break;
-					}
-				}
+			blur: function({
+				detail
+			}) {
+				this.show.error = detail.value.toUpperCase() != this.item.name.toUpperCase();
+				uni.showToast({
+					title: this.show.error ? "OH Error！" : "OK Nice！",
+					icon: this.show.error ? "error" : "success"
+				});
+			},
+			bind: function(e) {
+				this.type.index = e.detail.value;
 			},
 			next() {
-				if (this.word.length) {
-					const random = parseInt(Math.random() * this.word.length);
-					this.item = this.word[random];
+				if (this.data.length) {
+					const random = parseInt(Math.random() * this.data.length);
+					this.item = this.data[random];
+					this.show.write = "";
+					this.show.error = false;
 				}
-			}
+			},
+			trigger({
+				index,
+				item
+			}) {
+				this.fab.content[index].active = !item.active;
+				switch (item.text) {
+					case '词意':
+						this.show.mean = item.active;
+						break;
+					case '默写':
+						this.show.show = item.active;
+						break;
+					default:
+						break;
+				};
+				this.$refs.fab.close();
+			},
 		}
 	}
 </script>
@@ -101,9 +159,27 @@
 
 		}
 
+		.uni-input {
+			margin: 20rpx auto;
+			padding: 20rpx;
+			font-size: 38rpx;
+			color: green;
+			font-weight: bold;
+			border: 1px solid #c8c7cc;
+			border-radius: 8rpx;
+		}
+
+		.error {
+			color: red;
+
+		}
+
 		uni-button[type=primary] {
 			background: #269939;
 		}
+	}
 
+	.uni-fab__circle {
+		background-color: #269939 !important;
 	}
 </style>
