@@ -1,6 +1,6 @@
 {
 	"bsonType": "object",
-	"required": [],
+	"required": ["type", "name", "mean"],
 	"permission": {
 		"read": true,
 		"create": true,
@@ -11,11 +11,43 @@
 		"_id": {
 			"description": "ID，系统自动生成"
 		},
-		"type": "",
-		"name": "",
-		"read": "",
-		"mean": "",
-		"desc": "",
-		"attr": []
+		"type": {
+			"bsonType": "string",
+			"title": "类型",
+			"description": "类型名称",
+			"trim": "both"
+		},
+
+		"name": {
+			"bsonType": "string",
+			"title": "单词",
+			"trim": "both"
+		},
+		"read": {
+			"bsonType": "string",
+			"title": "识读",
+			"trim": "both"
+		},
+		"mean": {
+			"bsonType": "string",
+			"title": "词意",
+			"trim": "both"
+		},
+		"desc": {
+			"bsonType": "string",
+			"title": "例句",
+			"trim": "both"
+		},
+		"image": {
+			"bsonType": "array",
+			"title": "例图"
+		},
+		"create_date": {
+			"bsonType": "timestamp",
+			"description": "创建时间",
+			"forceDefaultValue": {
+				"$env": "now"
+			}
+		}
 	}
 }

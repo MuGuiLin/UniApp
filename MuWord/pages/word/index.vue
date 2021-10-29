@@ -1,16 +1,20 @@
 <template>
 	<view class="word">
-		<uni-card :title="item.name" mode="style" :is-title="!show.show" :is-shadow="true" :thumbnail="thum"
-			:extra="item.read">
+		<uni-card :title="data.item.name" mode="style" :is-title="!show.show" :is-shadow="true"
+			:thumbnail="thum(data.item.image)" :extra="data.item.read">
 			<view class="mean">
-				<text v-show="show.mean">{{item.mean}}</text>
+				<text v-show="show.mean">{{data.item.mean}}</text>
+			</view>
+			<view class="desc">
+				<text>{{data.item.desc}}</text>
 			</view>
 		</uni-card>
 
 		<uni-group>
-			<input v-if="show.show" class="uni-input" :class="{'error': show.error}" @blur="blur" v-model="show.write" placeholder="在这里默认单词哦!" />
-			<picker @change="bind" :value="type.index" :range="type.array" range-key="type">
-				<view class="uni-input">{{type.array[index].type}}</view>
+			<input v-if="show.show" class="uni-input" :class="{'error': show.error}" @blur="blur" v-model="show.write"
+				placeholder="在这里默认单词哦!" />
+			<picker @change="bind" :value="type.index" :range="type.array" range-key="name">
+				<view class="uni-input">{{type.array[type.index].name}}</view>
 			</picker>
 		</uni-group>
 
@@ -18,7 +22,8 @@
 			<button type="primary" @click="next">NEXT</button>
 		</uni-group>
 
-		<uni-fab ref="fab" :pattern="fab.pattern" :content="fab.content" :horizontal="fab.horizontal" :vertical="fab.vertical" :direction="fab.direction" @trigger="trigger" />
+		<uni-fab ref="fab" :pattern="fab.pattern" :content="fab.content" :horizontal="fab.horizontal"
+			:vertical="fab.vertical" :direction="fab.direction" @trigger="trigger" />
 	</view>
 </template>
 
@@ -27,27 +32,32 @@
 	export default {
 		data() {
 			return {
-				data: [],
+				data: {
+					root: [],
+					word: [],
+					index: 0,
+					item: {
+						type: "名词",
+						name: "English",
+						read: "[ˈɪŋɡlɪʃ]",
+						mean: "英语;英文;英语语言文学;英语学科;英格兰人(有时误用以指包括苏格兰、威尔士和北爱尔兰人在内的英国人)",
+						desc: "",
+						attr: [],
+						image: []
+					}
+				},
 				show: {
 					mean: true,
 					show: false,
+					order: 0,
 					write: "",
 					error: false,
 				},
-				item: {
-					type: "名词",
-					name: "English",
-					read: "[ˈɪŋɡlɪʃ]",
-					mean: "英语;英文;英语语言文学;英语学科;英格兰人(有时误用以指包括苏格兰、威尔士和北爱尔兰人在内的英国人)",
-					desc: "",
-					attr: []
-				},
-				index: 0,
-				thum: 'https://vkceyugu.cdn.bspapp.com/VKCEYUGU-dc-site/460d46d0-4fcc-11eb-8ff1-d5dcf8779628.png',
 				type: {
 					index: 0,
 					array: [{
-						type: '全部',
+						name: "全部",
+						value: "all"
 					}]
 				},
 				fab: {
@@ -71,6 +81,24 @@
 							selectedIconPath: '/static/icon/write-h.svg',
 							text: '默写',
 							active: false
+						},
+						{
+							iconPath: '/static/icon/order-h.svg',
+							selectedIconPath: '/static/icon/random-h.svg',
+							text: '随机',
+							active: true
+						},
+						{
+							iconPath: '/static/icon/type.svg',
+							selectedIconPath: '/static/icon/type-h.svg',
+							text: '类型',
+							active: false
+						},
+						{
+							iconPath: '/static/icon/list.svg',
+							selectedIconPath: '/static/icon/list-h.svg',
+							text: '列表',
+							active: false
 						}
 					]
 				},
@@ -91,17 +119,22 @@
 		},
 		methods: {
 			init() {
+				db.collection('type').get().then(({
+					result
+				}) => {
+					this.type.array = [...this.type.array, ...result.data];
+				});
 				db.collection('word').get().then(({
 					result
 				}) => {
-					console.log(result)
-					this.data = result.data;
-					this.item = result.data[this.index];
-					const obj = {};
-					this.type.array = result.data.reduce(function(item, next) {
-						obj[next.type] ? '' : obj[next.type] = true && item.push(next);
-						return item;
-					}, []);
+					this.data.root = result.data;
+					this.data.word = result.data;
+					this.data.item = result.data[this.data.index];
+					// const obj = {};
+					// this.type.array = result.data.reduce(function(item, next) {
+					// 	obj[next.type] ? '' : obj[next.type] = true && item.push(next);
+					// 	return item;
+					// }, []);
 				});
 			},
 			blur: function({
@@ -113,13 +146,30 @@
 					icon: this.show.error ? "error" : "success"
 				});
 			},
-			bind: function(e) {
-				this.type.index = e.detail.value;
+			bind: function({
+				detail
+			}) {
+				const index = detail.value || 0;
+				this.type.index = index;
+				if (index) {
+					const type = this.type.array[index].name;
+					this.data.word = this.data.root.filter((o, i, a) => o.type == type);
+				} else {
+					this.data.word = this.data.root;
+				}
+			},
+			thum(img) {
+				return img?.length ? img[0]?.path : '/static/img/nui.png';
 			},
 			next() {
-				if (this.data.length) {
-					const random = parseInt(Math.random() * this.data.length);
-					this.item = this.data[random];
+				if (this.data.word.length) {
+					const length = this.data.word.length;
+					if (this.show.order) {
+						this.data.index = this.data.index >= length - 1 ? 0 : this.data.index + 1;
+					} else {
+						this.data.index = parseInt(Math.random() * length);
+					}
+					this.data.item = this.data.word[this.data.index];
 					this.show.write = "";
 					this.show.error = false;
 				}
@@ -136,6 +186,28 @@
 					case '默写':
 						this.show.show = item.active;
 						break;
+					case '随机':
+						this.show.order = 1;
+						this.fab.content[index].text = '顺序';
+						// this.fab.content[index].active = true;
+						break;
+					case '顺序':
+						this.show.order = 0;
+						this.fab.content[index].text = '随机';
+						// this.fab.content[index].active = true;
+						break;
+					case '类型':
+						this.fab.content[index].active = false;
+						uni.navigateTo({
+							url: './type/index'
+						});
+						break;
+					case '列表':
+						this.fab.content[index].active = false;
+						uni.navigateTo({
+							url: './list/index'
+						});
+						break;
 					default:
 						break;
 				};
@@ -149,14 +221,16 @@
 	.word {
 		.mean {
 			padding-top: 16rpx;
-			min-height: 200rpx;
+			min-height: 128rpx;
 			line-height: 56rpx;
-			letter-spacing: 2rpx;
 		}
-
+		.desc{
+			color: gray;
+			margin-top: 10rpx;
+			min-height: 100rpx;
+		}
 		.uni-list-cell {
 			margin: 20rpx;
-
 		}
 
 		.uni-input {
@@ -171,7 +245,6 @@
 
 		.error {
 			color: red;
-
 		}
 
 		uni-button[type=primary] {

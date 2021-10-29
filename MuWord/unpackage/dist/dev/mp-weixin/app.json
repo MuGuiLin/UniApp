@@ -1,0 +1,52 @@
+{
+  "pages": [
+    "pages/word/index",
+    "pages/learn/index",
+    "pages/index/index",
+    "pages/unicloud-db/index",
+    "pages/unicloud-db/add",
+    "pages/unicloud-db/update",
+    "pages/web-view/web-view",
+    "pages/word/type/index",
+    "pages/word/type/add",
+    "pages/word/type/edit",
+    "pages/word/type/detail",
+    "pages/word/list/index",
+    "pages/word/list/edit"
+  ],
+  "subPackages": [],
+  "window": {
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "爱 词",
+    "navigationBarBackgroundColor": "#F8F8F8",
+    "backgroundColor": "#F8F8F8"
+  },
+  "tabBar": {
+    "color": "#7A7E83",
+    "selectedColor": "#3CC51F",
+    "borderStyle": "black",
+    "backgroundColor": "white",
+    "list": [
+      {
+        "pagePath": "pages/word/index",
+        "iconPath": "static/icon/word.png",
+        "selectedIconPath": "static/icon/word-h.png",
+        "text": "单词"
+      },
+      {
+        "pagePath": "pages/learn/index",
+        "iconPath": "static/icon/learn.png",
+        "selectedIconPath": "static/icon/learn-h.png",
+        "text": "学习"
+      },
+      {
+        "pagePath": "pages/index/index",
+        "iconPath": "static/icon/study.png",
+        "selectedIconPath": "static/icon/study-h.png",
+        "text": "研究"
+      }
+    ]
+  },
+  "permission": {},
+  "usingComponents": {}
+}

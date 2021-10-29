@@ -48,6 +48,45 @@
 				"navigationBarTitleText": "Web-View",
 				"enablePullDownRefresh": false
 			}
+		},
+		{
+			"path": "pages/word/type/index",
+			"style": {
+				"navigationBarTitleText": "列表",
+				"enablePullDownRefresh": true
+			}
+		},
+		{
+			"path": "pages/word/type/add",
+			"style": {
+				"navigationBarTitleText": "新增"
+			}
+		},
+		{
+			"path": "pages/word/type/edit",
+			"style": {
+				"navigationBarTitleText": "编辑"
+			}
+		},
+		{
+			"path": "pages/word/type/detail",
+			"style": {
+				"navigationBarTitleText": "详情"
+			}
+		},
+		{
+			"path": "pages/word/list/index",
+			"style": {
+				"navigationBarTitleText": "列表",
+				"enablePullDownRefresh": true
+			}
+		},
+		{
+			"path": "pages/word/list/edit",
+			"style": {
+				"navigationBarTitleText": "新编",
+				"enablePullDownRefresh": true
+			}
 		}
 	],
 	"globalStyle": {
