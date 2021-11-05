@@ -1,9 +1,0 @@
-{
-  "navigationBarTitleText": "Words",
-  "enablePullDownRefresh": true,
-  "usingComponents": {
-    "uni-card": "/uni_modules/uni-card/components/uni-card/uni-card",
-    "uni-group": "/uni_modules/uni-group/components/uni-group/uni-group",
-    "uni-fab": "/uni_modules/uni-fab/components/uni-fab/uni-fab"
-  }
-}

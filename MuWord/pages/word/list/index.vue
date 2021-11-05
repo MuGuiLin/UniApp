@@ -1,23 +1,28 @@
 <template>
-	<uni-group>
-		<unicloud-db v-slot:default="{data, loading, hasMore, error, options}" ref="udb" collection="word" @load="onqueryload"
-			@error="onqueryerror">
-			<view v-if="error">{{error.message}}</view>
-			<view v-else>
-				<!-- <text>{{data}}</text> -->
-				<uni-list>
-					<uni-list-item showArrow v-for="(item,index) in data" :key="item._id" :title="item.name"
-						:note="item.mean" @click.native="update(item._id)" @longpress.native="remove(item._id)">
-					</uni-list-item>
-				</uni-list>
-			</view>
-			<uni-load-more :status="loading ? 'loading' : (hasMore ? 'more' : 'noMore')"></uni-load-more>
-		</unicloud-db>
-		<uni-fab ref="fab" horizontal="right" vertical="bottom" :pop-menu="false" @fabClick="update" />
-	</uni-group>
+	<view class="list">
+		<uni-search-bar :focus="true" bgColor="white" @input="input" placeholder="请输入要搜索的单词全称!" cancelButton="none">
+		</uni-search-bar>
+		<uni-group title="Word列表:" top="0" >
+			<unicloud-db ref="udb" v-slot:default="{data, loading, hasMore, error, options}" collection="word"
+				orderby="create_date desc" :where="where" @load="onqueryload" @error="onqueryerror">
+				<view v-if="error">{{error.message}}</view>
+				<view v-else>
+					<!-- <text>{{data}}</text> -->
+					<uni-list>
+						<uni-list-item showArrow v-for="(item,index) in data" :key="item._id" :title="item.name"
+							:note="item.mean" @click.native="update(item._id)" @longpress.native="remove(item._id)">
+						</uni-list-item>
+					</uni-list>
+				</view>
+				<uni-load-more :status="loading ? 'loading' : (hasMore ? 'more' : 'noMore')"></uni-load-more>
+			</unicloud-db>
+			<uni-fab ref="fab" horizontal="right" vertical="bottom" :pop-menu="false" @fabClick="update" />
+		</uni-group>
+	</view>
 </template>
 
 <script>
+	let items = null;
 	export default {
 		data() {
 			return {
@@ -35,12 +40,27 @@
 				clear: true //可选参数，是否清空数据
 			}, () => {
 				uni.stopPullDownRefresh()
-			})
+			});
 		},
 		onReachBottom() { //滚动到底翻页
 			this.$refs.udb.loadMore()
 		},
 		methods: {
+			input(val) {
+				clearTimeout(items);
+				items = setTimeout(_ => {
+					this.where = val ? {
+						name: val
+					} : {};
+					this.$nextTick(() => {
+						this.$refs.udb.loadData({
+							clear: true //可选参数，是否清空数据
+						}, () => {
+							uni.stopPullDownRefresh();
+						});
+					});
+				}, 1000);
+			},
 			onqueryload(data, ended) {
 				// 可在此处预处理数据，然后再渲染界面
 			},

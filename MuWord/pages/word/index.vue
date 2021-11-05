@@ -11,16 +11,20 @@
 		</uni-card>
 
 		<uni-group>
-			<input v-if="show.show" class="uni-input" :class="{'error': show.error}" @blur="blur" v-model="show.write"
+			<input v-if="show.show" class="uni-input" :class="{'error': show.error}" @input="input" v-model="show.write"
 				placeholder="在这里默认单词哦!" />
 			<picker @change="bind" :value="type.index" :range="type.array" range-key="name">
 				<view class="uni-input">{{type.array[type.index].name}}</view>
 			</picker>
 		</uni-group>
 
-		<uni-group margin-top="10">
-			<button type="primary" @click="next">NEXT</button>
-		</uni-group>
+		<view class="btns">
+			<button type="warn" @click="prev">
+				<uni-icons type="back" color="white" size="20"></uni-icons>PREV
+			</button>
+			<button type="primary" @click="next">NEXT<uni-icons type="forward" color="white" size="20"></uni-icons>
+			</button>
+		</view>
 
 		<uni-fab ref="fab" :pattern="fab.pattern" :content="fab.content" :horizontal="fab.horizontal"
 			:vertical="fab.vertical" :direction="fab.direction" @trigger="trigger" />
@@ -29,6 +33,7 @@
 
 <script>
 	const db = uniCloud.database();
+	let items = null;
 	export default {
 		data() {
 			return {
@@ -62,7 +67,7 @@
 				},
 				fab: {
 					horizontal: 'right',
-					vertical: 'bottom',
+					vertical: 'top',
 					direction: 'vertical',
 					pattern: {
 						color: '#7A7E83',
@@ -118,33 +123,70 @@
 
 		},
 		methods: {
+			word(where = {}) {
+				db.collection('word')
+					// .where('type == "连词"') // where(可以指定字符串，也可以指定一个对象)
+					.where(where)
+					// .field(20) // 指定返回字的段
+					// .skip(20) // 跳过前20条，可以通过skip() + limit()来进行分页查询, 这里对应的分页条件为：每页20条，取第2页
+					.limit(1000) // limit不设置的情况下默认返回100条数据；设置limit有最大值，腾讯云限制为最大1000条，阿里云限制为最大500条。
+					// .orderBy('create_date desc') // 按照create_date降序排列 asc(升序)、desc(降序)，多个字段排序，以逗号分隔，写在前面的排序字段优先级高于后面。
+					.get()
+					// .get({getOne:true}) // getOn只查一条记录，其实等价于上一节的limit(1)。
+					.then(({
+						result
+					}) => {
+						if (result.affectedDocs) {
+							this.data.root = result.data;
+							this.data.word = result.data;
+							this.data.item = result.data[this.data.index];
+							if(where?.type) {
+								uni.showToast({
+									title: `已加载${result.affectedDocs}个！`,
+									icon: "success"
+								});
+							}
+						} else {
+							uni.showToast({
+								title: "暂无数据！",
+								icon: "error"
+							});
+							// 统计符合查询条件的记录数 affectedDocs表示从服务器返回给前端的数据条数。默认100条，可通过limit方法调整
+							console.log('result.data长度：', result.affectedDocs);
+							
+							// 单纯统计数量，不返回数据明细 .count()返回的total则是指符合查询条件的记录总数，至于这些记录是否返回给前端，和count无关。
+							console.log('单纯统计数量，不返回数据明细：', db.collection('word').count());
+						}
+						// const obj = {};
+						// this.type.array = result.data.reduce(function(item, next) {
+						// 	obj[next.type] ? '' : obj[next.type] = true && item.push(next);
+						// 	return item;
+						// }, []);
+					});
+			},
 			init() {
 				db.collection('type').get().then(({
 					result
 				}) => {
 					this.type.array = [...this.type.array, ...result.data];
-				});
-				db.collection('word').get().then(({
-					result
-				}) => {
-					this.data.root = result.data;
-					this.data.word = result.data;
-					this.data.item = result.data[this.data.index];
-					// const obj = {};
-					// this.type.array = result.data.reduce(function(item, next) {
-					// 	obj[next.type] ? '' : obj[next.type] = true && item.push(next);
-					// 	return item;
-					// }, []);
+					this.word();
 				});
 			},
-			blur: function({
+			input: function({
 				detail
 			}) {
-				this.show.error = detail.value.toUpperCase() != this.item.name.toUpperCase();
-				uni.showToast({
-					title: this.show.error ? "OH Error！" : "OK Nice！",
-					icon: this.show.error ? "error" : "success"
-				});
+				clearTimeout(items);
+				items = setTimeout(_ => {
+					// 提取数字:value.replace(/[^\d]/g,'');
+					// 提取中文:value.replace(/[^\u4E00-\u9FA5]/g,'');
+					// 提取英文:value.replace(/[^a-zA-Z]/g,'');
+					this.show.error = detail.value.toUpperCase() != this.data.item.name.replace(/[^a-zA-Z]/g,
+						'').toUpperCase();
+					uni.showToast({
+						title: this.show.error ? "OH Error！" : "OK Nice！",
+						icon: this.show.error ? "error" : "success"
+					});
+				}, 1000);
 			},
 			bind: function({
 				detail
@@ -152,14 +194,36 @@
 				const index = detail.value || 0;
 				this.type.index = index;
 				if (index) {
-					const type = this.type.array[index].name;
-					this.data.word = this.data.root.filter((o, i, a) => o.type == type);
+					let type = this.type.array[index].name;
+
+					// this.data.word = this.data.root.filter((o, i, a) => o.type == type);
+
+					type = index ? {
+						type
+					} : {};
+					this.word(type);
 				} else {
-					this.data.word = this.data.root;
+					// 没有条件，就取文档中的前1000条数据
+					// this.data.word = this.data.root;
+					
+					this.word({});
 				}
 			},
 			thum(img) {
 				return img?.length ? img[0]?.path : '/static/img/nui.png';
+			},
+			prev() {
+				if (this.data.word.length) {
+					const length = this.data.word.length;
+					if (this.show.order) {
+						this.data.index = this.data.index <= 0 ? length - 1 : this.data.index - 1;
+					} else {
+						this.data.index = parseInt(Math.random() * length);
+					}
+					this.data.item = this.data.word[this.data.index];
+					this.show.write = "";
+					this.show.error = false;
+				}
 			},
 			next() {
 				if (this.data.word.length) {
@@ -193,6 +257,7 @@
 						break;
 					case '顺序':
 						this.show.order = 0;
+						this.data.index = 0;
 						this.fab.content[index].text = '随机';
 						// this.fab.content[index].active = true;
 						break;
@@ -224,11 +289,13 @@
 			min-height: 128rpx;
 			line-height: 56rpx;
 		}
-		.desc{
+
+		.desc {
 			color: gray;
 			margin-top: 10rpx;
 			min-height: 100rpx;
 		}
+
 		.uni-list-cell {
 			margin: 20rpx;
 		}
@@ -236,7 +303,6 @@
 		.uni-input {
 			margin: 20rpx auto;
 			padding: 20rpx;
-			font-size: 38rpx;
 			color: green;
 			font-weight: bold;
 			border: 1px solid #c8c7cc;
@@ -245,6 +311,17 @@
 
 		.error {
 			color: red;
+		}
+
+		.btns {
+			width: 100%;
+			display: flex;
+			flex-direction: row;
+			justify-content: space-between;
+		}
+
+		.btns button {
+			width: 40%;
 		}
 
 		uni-button[type=primary] {

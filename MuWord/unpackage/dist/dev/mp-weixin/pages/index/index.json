@@ -1,8 +1,0 @@
-{
-  "navigationBarTitleText": "Uni-App",
-  "navigationBarTextStyle": "white",
-  "navigationBarBackgroundColor": "#00aa00",
-  "usingComponents": {
-    "uni-title": "/uni_modules/uni-title/components/uni-title/uni-title"
-  }
-}

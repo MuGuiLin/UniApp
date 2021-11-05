@@ -5,7 +5,9 @@
 			"path": "pages/word/index",
 			"style": {
 				"navigationBarTitleText": "Words",
-				"enablePullDownRefresh": true
+				"enablePullDownRefresh": true,
+				"navigationBarTextStyle": "white",
+				"navigationBarBackgroundColor": "#007aff"
 			}
 		}, {
 			"path": "pages/learn/index",
@@ -78,7 +80,9 @@
 			"path": "pages/word/list/index",
 			"style": {
 				"navigationBarTitleText": "列表",
-				"enablePullDownRefresh": true
+				"enablePullDownRefresh": true,
+				"navigationBarTextStyle": "white",
+				"navigationBarBackgroundColor": "#007aff"
 			}
 		},
 		{

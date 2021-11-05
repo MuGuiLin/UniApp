@@ -16,14 +16,17 @@
 					placeholderStyle="color: green" />
 			</uni-forms-item>
 			<uni-forms-item label="词意" name="mean" required>
-				<uni-easyinput type="textarea" v-model="formData.mean" placeholder="请输入词意!" autoHeight clearSize="15" />
+				<uni-easyinput type="textarea" v-model="formData.mean" placeholder="请输入词意!" trim autoHeight clearSize="15"></uni-easyinput>
 			</uni-forms-item>
 			<uni-forms-item label="例句" name="desc">
-				<uni-easyinput type="textarea" v-model="formData.desc" placeholder="请输入例句!" />
+				<uni-easyinput type="textarea" v-model="formData.desc" placeholder="请输入例句!" trim autoHeight clearSize="15"></uni-easyinput>
 			</uni-forms-item>
 			<uni-forms-item label="例图" name="image">
 				<uni-file-picker v-model="formData.image" fileMediatype="image" mode="grid" @select="select" :limit="1"
 					@progress="progress" @success="success" @fail="fail" />
+			</uni-forms-item>
+			<uni-forms-item label="网络例图">
+				<uni-easyinput type="textarea" :value="imgurl(formData.image)" @input="netimg" placeholder="请输入网络例图URL!" trim autoHeight clearSize="15" />
 			</uni-forms-item>
 			<uni-forms-item>
 				<button type="primary" @click="submit">提交</button>
@@ -51,7 +54,16 @@
 					read: "",
 					mean: "",
 					desc: "",
-					image: []
+					image: [{
+						"extname": "",
+						"fileType": "",
+						"image": {},
+						"name": "",
+						"path": "",
+						"size": null,
+						"fileID": "",
+						"url": ""
+					}]
 				},
 				rules: {
 					// type: {
@@ -103,8 +115,7 @@
 							this.typeData.index = this.typeData.data.findIndex(o => o.name == result.data
 								.type) > 0 ? this.typeData.data.findIndex(o => o.name == result.data
 								.type) : 0;
-						}, 300)
-						console.log(this.typeData.index);
+						}, 300);
 					}
 				}).catch(err => {
 					console.error(err);
@@ -115,6 +126,9 @@
 			}) => {
 				this.typeData.data = [...this.typeData.data, ...result.data];
 			});
+		},
+		onReady(){
+			// console.log(1);
 		},
 		onPullDownRefresh() {
 			setTimeout(function() {
@@ -158,6 +172,20 @@
 			// 上传失败
 			fail(e) {
 				// console.log('上传失败：', e);
+			},
+
+			imgurl(img) {
+				return img && img.length ? img[0].url : '';
+			},
+
+			netimg(val) {
+				if (this.formData.image && this.formData.image.length) {
+					this.formData.image[0].url = val;
+				} else {
+					this.formData.image = [{
+						url: val
+					}];
+				}
 			},
 
 			back() {
