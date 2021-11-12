@@ -1,25 +1,40 @@
 <template>
 	<view class="content">
-		<image class="logo" src="/static/img/uni-app.png"></image>
-		<view class="text-area">
-			<uni-title type="h1" :title="title"></uni-title>
-			<text class="title">{{title}}</text>
-		</view>
-		<view class="btn-box">
-			<navigator url="/pages/unicloud-db/index?title=navigate" hover-class="navigator-hover">
-				<button type="primary">跳转到新页面 clientDB</button>
-			</navigator>
-			<navigator url="/pages/unicloud-db/index?title=redirect" hover-class="other-navigator-hover"
-				open-type="redirect">
-				<button type="warn">在当前页打开 clientDB</button>
-			</navigator>
-			<navigator url="/pages/learn/index" open-type="switchTab" hover-class="other-navigator-hover">
-				<button type="default">跳转到tab页面 Learing</button>
-			</navigator>
-			<!-- 这种写法只有h5平台支持，不跨端，不推荐使用 -->
-			<button type="warn" @click="navigateTo('/pages/web-view/web-view')">跳转到web-view页面-h5平台支持</button>
-			<button type="primary" @click="goto('/pages/web-view/web-view')">通过方法跳转到web-view页面 - 推荐</button>
-		</view>
+		<uni-swiper-dot :info="info" :current="current" field="content" :mode="mode" :dotsStyles="dotsStyles">
+			<swiper class="swiper-box" @change="change">
+				<swiper-item v-for="(item ,index) in info" :key="index">
+					<view class="swiper-item">
+						{{item.content}}
+					</view>
+				</swiper-item>
+			</swiper>
+		</uni-swiper-dot>
+		<uni-grid :column="3" :showBorder="true" :square="true" @change="grid">
+			<uni-grid-item>
+				<uni-icons type="home" size="36" color="#00aa00"></uni-icons>
+				<text class="text">记单词</text>
+			</uni-grid-item>
+			<uni-grid-item>
+				<uni-icons type="hand-thumbsup" size="36" color="#00aa00"></uni-icons>
+				<text class="text">记单词</text>
+			</uni-grid-item>
+			<uni-grid-item>
+				<uni-icons type="eye" size="36" color="#00aa00"></uni-icons>
+				<text class="text">记单词</text>
+			</uni-grid-item>
+			<uni-grid-item>
+				<uni-icons type="star" size="36" color="#00aa00"></uni-icons>
+				<text class="text">记单词</text>
+			</uni-grid-item>
+			<uni-grid-item>
+				<uni-icons type="mic-filled" size="36" color="#00aa00"></uni-icons>
+				<text class="text">记单词</text>
+			</uni-grid-item>
+			<uni-grid-item>
+				<uni-icons type="gear-filled" size="36" color="#00aa00"></uni-icons>
+				<text class="text">记单词</text>
+			</uni-grid-item>
+		</uni-grid>
 	</view>
 </template>
 
@@ -27,7 +42,24 @@
 	export default {
 		data() {
 			return {
-				title: 'Hello Uni App'
+				info: [{
+					content: '好好学习！'
+				}, {
+					content: '每天进步！'
+				}, {
+					content: '贵在坚持！'
+				}],
+				current: 0,
+				mode: 'round',
+				dotsStyles: {
+					width: 10,
+					height: 10,
+					bottom: 16,
+					backgroundColor: 'white',
+					border: 'green',
+					selectedBackgroundColor: 'yellow',
+					selectedBorder: 'white',
+				}
 			}
 		},
 		onLoad() {
@@ -49,47 +81,48 @@
 			console.log(3);
 		},
 		methods: {
-			goto(url) {
-				uni.navigateTo({
-					url: `${url}?src=https://uniapp.dcloud.io/component/web-view`
-				});
-			}
+			change(e) {
+				this.current = e.detail.current;
+			},
+			grid(e) {
+				console.log(e.detail.index)
+				switch (e.detail.index) {
+					case 0:
+						uni.navigateTo({
+							url: '../word/index'
+						});
+						break;
+					default:
+						break;
+				}
+			},
 		}
 	}
 </script>
 
 <style lang="scss">
 	.content {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		justify-content: center;
-
-		.logo {
-			margin-top: 50rpx;
+		text-align: center;
+		.swiper-box{
+			border-top: 1rpx solid white;
+			height: 500rpx;
+		}
+		.swiper-item {
+			color: white;
+			font-size: 66rpx;
+			line-height: 500rpx;
+			background: repeating-radial-gradient(#005200, #00aa00);
 		}
 
-		.text-area {
-			display: flex;
-			justify-content: center;
-
-			.title {
-				line-height: 100rpx;
-				font-size: 36rpx;
-				color: #ff007f;
-			}
+		.uni-icons {
+			display: inline-block;
+			margin-top: 66rpx;
 		}
 
-
-		.title {
-			font-size: 36rpx;
-			color: #8f8f94;
-		}
-
-		.btn-box {
-			button {
-				margin: 20rpx;
-			}
+		.text {
+			
+			color: #00aa00;
+			line-height: 50rpx;
 		}
 	}
 </style>

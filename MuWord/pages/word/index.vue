@@ -6,13 +6,13 @@
 				<text v-show="show.mean">{{data.item.mean}}</text>
 			</view>
 			<view class="desc">
-				<text>{{data.item.desc}}</text>
+				<text v-show="!show.show">{{data.item.desc}}</text>
 			</view>
 		</uni-card>
 
 		<uni-group>
-			<input v-if="show.show" class="uni-input" :class="{'error': show.error}" @input="input" v-model="show.write"
-				placeholder="在这里默认单词哦!" />
+			<input v-if="show.show" class="uni-input" :class="{'error': true === show.error, 'correct': false === show.error}" @input="input"
+				v-model="show.write" placeholder="在这里默认单词哦!" />
 			<picker @change="bind" :value="type.index" :range="type.array" range-key="name">
 				<view class="uni-input">{{type.array[type.index].name}}</view>
 			</picker>
@@ -56,7 +56,7 @@
 					show: false,
 					order: 0,
 					write: "",
-					error: false,
+					error: null,
 				},
 				type: {
 					index: 0,
@@ -140,7 +140,7 @@
 							this.data.root = result.data;
 							this.data.word = result.data;
 							this.data.item = result.data[this.data.index];
-							if(where?.type) {
+							if (where?.type) {
 								uni.showToast({
 									title: `已加载${result.affectedDocs}个！`,
 									icon: "success"
@@ -153,7 +153,7 @@
 							});
 							// 统计符合查询条件的记录数 affectedDocs表示从服务器返回给前端的数据条数。默认100条，可通过limit方法调整
 							console.log('result.data长度：', result.affectedDocs);
-							
+
 							// 单纯统计数量，不返回数据明细 .count()返回的total则是指符合查询条件的记录总数，至于这些记录是否返回给前端，和count无关。
 							console.log('单纯统计数量，不返回数据明细：', db.collection('word').count());
 						}
@@ -184,7 +184,14 @@
 						'').toUpperCase();
 					uni.showToast({
 						title: this.show.error ? "OH Error！" : "OK Nice！",
-						icon: this.show.error ? "error" : "success"
+						icon: this.show.error ? "error" : "success",
+						success: _ => {
+							if (!this.show.error) {
+								setTimeout(_ => {
+									this.next();
+								}, 1000);
+							}
+						}
 					});
 				}, 1000);
 			},
@@ -205,7 +212,7 @@
 				} else {
 					// 没有条件，就取文档中的前1000条数据
 					// this.data.word = this.data.root;
-					
+
 					this.word({});
 				}
 			},
@@ -222,7 +229,7 @@
 					}
 					this.data.item = this.data.word[this.data.index];
 					this.show.write = "";
-					this.show.error = false;
+					this.show.error = null;
 				}
 			},
 			next() {
@@ -235,7 +242,7 @@
 					}
 					this.data.item = this.data.word[this.data.index];
 					this.show.write = "";
-					this.show.error = false;
+					this.show.error = null;
 				}
 			},
 			trigger({
@@ -303,7 +310,7 @@
 		.uni-input {
 			margin: 20rpx auto;
 			padding: 20rpx;
-			color: green;
+			color: grey;
 			font-weight: bold;
 			border: 1px solid #c8c7cc;
 			border-radius: 8rpx;
@@ -313,7 +320,14 @@
 			color: red;
 		}
 
+		.correct {
+			color: green;
+		}
+
 		.btns {
+			position: fixed;
+			left: 0;
+			bottom: 10px;
 			width: 100%;
 			display: flex;
 			flex-direction: row;

@@ -2,21 +2,6 @@
 	"pages": [
 		// pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
 		{
-			"path": "pages/word/index",
-			"style": {
-				"navigationBarTitleText": "Words",
-				"enablePullDownRefresh": true,
-				"navigationBarTextStyle": "white",
-				"navigationBarBackgroundColor": "#007aff"
-			}
-		}, {
-			"path": "pages/learn/index",
-			"style": {
-				"navigationBarTitleText": "Learning",
-				"enablePullDownRefresh": false
-			}
-		},
-		{
 			"path": "pages/index/index",
 			"style": {
 				"navigationBarTitleText": "Uni-App",
@@ -25,26 +10,54 @@
 			}
 		},
 		{
+			"path": "pages/learn/index",
+			"style": {
+				"navigationBarTitleText": "Learning",
+				"enablePullDownRefresh": false,
+				"navigationBarTextStyle": "white",
+				"navigationBarBackgroundColor": "#e64340"
+			}
+		},
+		{
+			"path": "pages/study/index",
+			"style": {
+				"navigationBarTitleText": "Study",
+				"enablePullDownRefresh": false,
+				"navigationBarTextStyle": "white",
+				"navigationBarBackgroundColor": "#007aff"
+			}
+		},
+		{
+			"path": "pages/word/index",
+			"style": {
+				"navigationBarTitleText": "Words",
+				"enablePullDownRefresh": true
+			}
+		},
+		{
 			"path": "pages/unicloud-db/index",
 			"style": {
 				"navigationBarTitleText": "ClientDB",
 				"enablePullDownRefresh": false
 			}
-		}, {
+		},
+		{
 			"path": "pages/unicloud-db/add",
 			"style": {
 				"navigationBarTitleText": "添加",
 				"enablePullDownRefresh": false
 			}
 
-		}, {
+		},
+		{
 			"path": "pages/unicloud-db/update",
 			"style": {
 				"navigationBarTitleText": "修改",
 				"enablePullDownRefresh": false
 			}
 
-		}, {
+		},
+		{
 			"path": "pages/web-view/web-view",
 			"style": {
 				"navigationBarTitleText": "Web-View",
@@ -80,9 +93,7 @@
 			"path": "pages/word/list/index",
 			"style": {
 				"navigationBarTitleText": "列表",
-				"enablePullDownRefresh": true,
-				"navigationBarTextStyle": "white",
-				"navigationBarBackgroundColor": "#007aff"
+				"enablePullDownRefresh": true
 			}
 		},
 		{
@@ -105,7 +116,7 @@
 		"borderStyle": "black",
 		"backgroundColor": "white",
 		"list": [{
-			"pagePath": "pages/word/index",
+			"pagePath": "pages/index/index",
 			"iconPath": "static/icon/word.png",
 			"selectedIconPath": "static/icon/word-h.png",
 			"text": "单词"
@@ -115,7 +126,7 @@
 			"selectedIconPath": "static/icon/learn-h.png",
 			"text": "学习"
 		}, {
-			"pagePath": "pages/index/index",
+			"pagePath": "pages/study/index",
 			"iconPath": "static/icon/study.png",
 			"selectedIconPath": "static/icon/study-h.png",
 			"text": "研究"
