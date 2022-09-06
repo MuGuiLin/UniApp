@@ -1,0 +1,46 @@
+* {
+    margin    : 0;
+    padding   : 0;
+    box-sizing: border-box;
+}
+
+body {
+    background   : #fc00ff;
+    background   : -webkit-linear-gradient(135deg, #fc00ff, #00dbde 55%);
+    /* background: linear-gradient(to right, #00dbde, #fc00ff); */
+}
+
+header {
+    height: 60px;
+}
+
+header>img {
+    margin: 10px;
+    width : 180px;
+}
+
+main {
+    display        : flex;
+    flex-direction : column;
+    justify-content: center;
+    align-items    : center;
+    height         : calc(100vh - 120px);
+}
+
+main>h1 {
+    font-size  : 56px;
+    color      : white;
+    text-shadow: 0 0 6px white;
+}
+
+main a {
+    line-height   : 32px;
+    font-size     : 18px;
+    letter-spacing: 2px;
+    color         : white;
+}
+
+footer {
+    height: 60px;
+
+}
