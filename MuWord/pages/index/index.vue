@@ -63,7 +63,7 @@
 			}
 		},
 		onLoad() {
-			console.log(1);
+			// console.log(1);
 			uniCloud.callFunction({
 				name: "word",
 				success: (e) => {
@@ -75,10 +75,10 @@
 			});
 		},
 		created: () => {
-			console.log(2);
+			// console.log(2);
 		},
 		mounted() {
-			console.log(3);
+			// console.log(3);
 		},
 		methods: {
 			change(e) {

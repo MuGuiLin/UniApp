@@ -112,9 +112,7 @@
 					this.formData = result.data;
 					if (this.formData.type) {
 						setTimeout(() => {
-							this.typeData.index = this.typeData.data.findIndex(o => o.name == result.data
-								.type) > 0 ? this.typeData.data.findIndex(o => o.name == result.data
-								.type) : 0;
+							this.typeData.index = this.typeData.data.findIndex(o => o.name == result.data.type) > 0 ? this.typeData.data.findIndex(o => o.name == result.data.type) : 0;
 						}, 300);
 					}
 				}).catch(err => {
