@@ -4,9 +4,9 @@
 		{
 			"path": "pages/index/index",
 			"style": {
-				"navigationBarTitleText": "Hello Word",
+				"navigationBarTitleText": "Uni-App",
 				"navigationBarTextStyle": "white",
-				"navigationBarBackgroundColor": "orange"
+				"navigationBarBackgroundColor": "#00aa00"
 			}
 		},
 		{
@@ -30,10 +30,8 @@
 		{
 			"path": "pages/word/index",
 			"style": {
-				"navigationBarTitleText": "单词速记",
-				"enablePullDownRefresh": true,
-				"navigationBarTextStyle": "white",
-				"navigationBarBackgroundColor": "orange"
+				"navigationBarTitleText": "jfj",
+				"enablePullDownRefresh": true
 			}
 		},
 		{
@@ -69,74 +67,69 @@
 		{
 			"path": "pages/word/type/index",
 			"style": {
-				"navigationBarTitleText": "单词列表",
+				"navigationBarTitleText": "列表",
 				"enablePullDownRefresh": true
 			}
 		},
 		{
 			"path": "pages/word/type/add",
 			"style": {
-				"navigationBarTitleText": "新增单词类型"
+				"navigationBarTitleText": "新增"
 			}
 		},
 		{
 			"path": "pages/word/type/edit",
 			"style": {
-				"navigationBarTitleText": "编辑单词类型"
+				"navigationBarTitleText": "编辑"
 			}
 		},
 		{
 			"path": "pages/word/type/detail",
 			"style": {
-				"navigationBarTitleText": "单词类型详情"
+				"navigationBarTitleText": "详情"
 			}
 		},
 		{
 			"path": "pages/word/list/index",
 			"style": {
-				"navigationBarTitleText": "单词列表",
+				"navigationBarTitleText": "列表",
 				"enablePullDownRefresh": true
 			}
 		},
 		{
 			"path": "pages/word/list/edit",
 			"style": {
-				"navigationBarTitleText": "单词新编",
+				"navigationBarTitleText": "新编",
 				"enablePullDownRefresh": true
 			}
-		}, {
-			"path": "pages/word/spelling/index",
-			"style": {
-				"navigationBarTitleText": "单词拼读",
-				"enablePullDownRefresh": false
-			}
-
-		}, {
-			"path": "pages/word/phonetics/index",
-			"style": {
-				"navigationBarTitleText": "国际音标",
-				"enablePullDownRefresh": false,
-				"navigationBarTextStyle": "white",
-				"navigationBarBackgroundColor": "#007aff"
-			}
-
 		}
-	    ,{
-            "path" : "pages/word/imitate/index",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "模仿秀",
-               "enablePullDownRefresh": false,
-               "navigationBarTextStyle": "white",
-               "navigationBarBackgroundColor": "#007aff"
-            }
-            
-        }
-    ],
+	],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "Hello Word",
 		"navigationBarBackgroundColor": "#F8F8F8",
 		"backgroundColor": "#F8F8F8"
+	},
+	"tabBar": {
+		"color": "#7A7E83",
+		"selectedColor": "#3CC51F",
+		"borderStyle": "black",
+		"backgroundColor": "white",
+		"list": [{
+			"pagePath": "pages/index/index",
+			"iconPath": "static/icon/word.png",
+			"selectedIconPath": "static/icon/word-h.png",
+			"text": "单词"
+		}, {
+			"pagePath": "pages/learn/index",
+			"iconPath": "static/icon/learn.png",
+			"selectedIconPath": "static/icon/learn-h.png",
+			"text": "学习"
+		}, {
+			"pagePath": "pages/study/index",
+			"iconPath": "static/icon/study.png",
+			"selectedIconPath": "static/icon/study-h.png",
+			"text": "研究"
+		}]
 	}
 }

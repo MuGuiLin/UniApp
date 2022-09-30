@@ -16,10 +16,10 @@
 					placeholderStyle="color: green" />
 			</uni-forms-item>
 			<uni-forms-item label="词意" name="mean" required>
-				<uni-easyinput type="textarea" v-model="formData.mean" placeholder="请输入词意!" trim autoHeight clearSize="15"></uni-easyinput>
+				<uni-easyinput type="textarea" v-model="formData.mean" maxlength="-1" placeholder="请输入词意!" trim autoHeight clearSize="15"></uni-easyinput>
 			</uni-forms-item>
 			<uni-forms-item label="例句" name="desc">
-				<uni-easyinput type="textarea" v-model="formData.desc" placeholder="请输入例句!" trim autoHeight clearSize="15"></uni-easyinput>
+				<uni-easyinput type="textarea" v-model="formData.desc" maxlength="-1" placeholder="请输入例句!" trim autoHeight clearSize="15"></uni-easyinput>
 			</uni-forms-item>
 			<uni-forms-item label="例图" name="image">
 				<uni-file-picker v-model="formData.image" fileMediatype="image" mode="grid" @select="select" :limit="1"
@@ -29,7 +29,7 @@
 				<uni-easyinput type="textarea" :value="imgurl(formData.image)" @input="netimg" placeholder="请输入网络例图URL!" trim autoHeight clearSize="15" />
 			</uni-forms-item>
 			<uni-forms-item>
-				<button type="primary" @click="submit">提交</button>
+				<button type="primary" @click="submit">立即添加</button>
 			</uni-forms-item>
 		</uni-forms>
 	</uni-group>

@@ -14,26 +14,17 @@
 			<input v-if="show.show" class="uni-input"
 				:class="{'error': true === show.error, 'correct': false === show.error}" @input="input"
 				v-model="show.write" placeholder="在这里默认单词哦!" />
-			<picker @change="bind" :value="type.index" :range="type.array" range-key="name">
+			<!-- <picker @change="bind" :value="type.index" :range="type.array" range-key="name">
 				<view class="uni-input">{{type.array[type.index].name}}</view>
-			</picker>
+			</picker> -->
 		</uni-group>
 
 		<view class="btns">
-			<template v-if="this.show.order">
-				<button type="warn" @click="prev">
-					<uni-icons type="back" color="white" size="20"></uni-icons>PREV
-				</button>
-				<button type="primary" @click="next">NEXT
-					<uni-icons type="forward" color="white" size="20"></uni-icons>
-				</button>
-			</template>
-			<template v-else>
-				<button type="primary" @click="random">
-					<uni-icons type="loop" color="white" size="20"></uni-icons>RANDOM
-				</button>
-
-			</template>
+			<button type="warn" @click="prev">
+				<uni-icons type="back" color="white" size="20"></uni-icons>PREV
+			</button>
+			<button type="primary" @click="next">NEXT<uni-icons type="forward" color="white" size="20"></uni-icons>
+			</button>
 		</view>
 
 		<uni-fab ref="fab" :pattern="fab.pattern" :content="fab.content" :horizontal="fab.horizontal"
@@ -133,7 +124,10 @@
 
 		},
 		methods: {
-			word(where = {}) {
+			word(where = {
+				type: '模仿秀 imitate.'
+			}) {
+				console.log(where);
 				db.collection('word')
 					// .where('type == "连词"') // where(可以指定字符串，也可以指定一个对象)
 					.where(where)
@@ -218,6 +212,7 @@
 					type = index ? {
 						type
 					} : {};
+					console.log(type)
 					this.word(type);
 				} else {
 					// 没有条件，就取文档中的前1000条数据
@@ -232,7 +227,11 @@
 			prev() {
 				if (this.data.word.length) {
 					const length = this.data.word.length;
-					this.data.index = this.data.index <= 0 ? length - 1 : this.data.index - 1;
+					if (this.show.order) {
+						this.data.index = this.data.index <= 0 ? length - 1 : this.data.index - 1;
+					} else {
+						this.data.index = parseInt(Math.random() * length);
+					}
 					this.data.item = this.data.word[this.data.index];
 					this.show.write = "";
 					this.show.error = null;
@@ -241,16 +240,11 @@
 			next() {
 				if (this.data.word.length) {
 					const length = this.data.word.length;
-					this.data.index = this.data.index >= length - 1 ? 0 : this.data.index + 1;
-					this.data.item = this.data.word[this.data.index];
-					this.show.write = "";
-					this.show.error = null;
-				}
-			},
-			random() {
-				if (this.data.word.length) {
-					const length = this.data.word.length;
-					this.data.index = parseInt(Math.random() * length);
+					if (this.show.order) {
+						this.data.index = this.data.index >= length - 1 ? 0 : this.data.index + 1;
+					} else {
+						this.data.index = parseInt(Math.random() * length);
+					}
 					this.data.item = this.data.word[this.data.index];
 					this.show.write = "";
 					this.show.error = null;

@@ -1,6 +1,6 @@
 <template>
 	<view class="content">
-		<image class="logo" src="/static/img/uni-app.png"></image>
+		<image class="logo" src="/static/imgs/uni-app.png"></image>
 		<view class="text-area">
 			<uni-title type="h1" :title="title"></uni-title>
 			<text class="title">{{title}}</text>

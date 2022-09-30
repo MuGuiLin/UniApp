@@ -1,8 +1,8 @@
 <template>
 	<view class="learn">
-		<uni-card :title="uni.name" mode="style" :is-shadow="true" thumbnail="/static/img/uni-ui.gif"
+		<uni-card :title="uni.name" mode="style" :is-shadow="true" thumbnail="/static/imgs/uni-ui.gif"
 			:extra="uni.mean">
-			<button type="primary" @click="goto('http://caibugui.com/uni-ui')">uni-ui</button>
+			<button type="primary" @click="goto('https://hellouniapp.dcloud.net.cn')">Uni-UI</button>
 		</uni-card>
 		<uni-card :title="mui.name" mode="style" :is-shadow="true" :thumbnail="mui.thum" :extra="mui.mean">
 			<button type="warn" @click="goto('https://dev.dcloud.net.cn/mui')">MUI</button>
@@ -21,7 +21,7 @@
 				mui: {
 					name: "MUI",
 					mean: "最接近原生APP体验的高性能前端框架！",
-					thum: '/static/img/mui.png'
+					thum: '/static/imgs/mui.png'
 				},
 			};
 		},
